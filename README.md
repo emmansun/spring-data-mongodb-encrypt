@@ -1,4 +1,5 @@
 [![CI](https://github.com/emmansun/spring-data-mongodb-encrypt/actions/workflows/ci.yml/badge.svg)](https://github.com/emmansun/spring-data-mongodb-encrypt/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/emmansun/spring-data-mongodb-encrypt/graph/badge.svg)](https://codecov.io/gh/emmansun/spring-data-mongodb-encrypt)
 [![CodeQL](https://github.com/emmansun/spring-data-mongodb-encrypt/actions/workflows/codeql.yml/badge.svg)](https://github.com/emmansun/spring-data-mongodb-encrypt/actions/workflows/codeql.yml)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/emmansun/spring-data-mongodb-encrypt/badge)](https://scorecard.dev/viewer/?uri=github.com/emmansun/spring-data-mongodb-encrypt)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.emmansun/spring-data-mongodb-encrypt.svg)](https://central.sonatype.com/artifact/io.github.emmansun/spring-data-mongodb-encrypt)
