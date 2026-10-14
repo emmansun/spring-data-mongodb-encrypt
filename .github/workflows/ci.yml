@@ -1,0 +1,92 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build, Test & Analyze
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    services:
+      mongodb:
+        image: mongo:6.0
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --quiet --eval 'db.runCommand({ ping: 1 }).ok'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@b09bb98e06d4d774595224525879c09bc6e98c40 # v2.20.1
+        with:
+          egress-policy: audit
+
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Build & Test (with coverage)
+        run: >
+          mvn -B clean
+          org.jacoco:jacoco-maven-plugin:0.8.12:prepare-agent
+          verify
+          org.jacoco:jacoco-maven-plugin:0.8.12:report
+
+      - name: SpotBugs static analysis
+        run: mvn -B com.github.spotbugs:spotbugs-maven-plugin:4.8.6.6:spotbugs
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: test-reports
+          path: target/surefire-reports/
+          retention-days: 14
+          if-no-files-found: ignore
+
+      - name: Upload JaCoCo report
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: jacoco-report
+          path: target/site/jacoco/
+          retention-days: 14
+          if-no-files-found: ignore
+
+      - name: Upload SpotBugs report
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: spotbugs-report
+          path: target/spotbugsXml.xml
+          retention-days: 14
+          if-no-files-found: ignore
+
+      - name: Upload Coverage to Codecov
+        if: always() && env.CODECOV_TOKEN != ''
+        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        with:
+          token: ${{ env.CODECOV_TOKEN }}
+          files: target/site/jacoco/jacoco.xml
+          disable_search: true
+          fail_ci_if_error: false
