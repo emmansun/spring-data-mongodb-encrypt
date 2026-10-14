@@ -27,7 +27,9 @@ For spring-data 1 projects, please use the [spring-data-1](https://github.com/ag
 
 For spring-data 2 projects, please use the [spring-data-2](https://github.com/agoston/spring-data-mongodb-encrypt/tree/spring-data-2) branch.
 
-From version `2.9.0`, java 17 or higher is required. If stuck on older java, use version `2.8.0`. 
+From version `2.9.0`, java 17 or higher is required. If stuck on older java, use version `2.8.0`.
+
+A single artifact supports both Spring Boot 3.x (spring-data-mongodb 4.3+) and Spring Boot 4.x (spring-data-mongodb 5.x); both combinations are covered by the CI matrix (the latter via the Maven `sb4` profile).
 
 ## For the impatient
 

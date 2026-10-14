@@ -12,9 +12,19 @@ permissions:
 
 jobs:
   build:
-    name: Build, Test & Analyze
+    name: Build, Test & Analyze (${{ matrix.spring-boot }})
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # baseline: Spring Boot 3.x / Spring Data MongoDB 4.x (default Maven deps)
+          - spring-boot: '3.3'
+            maven-flags: ''
+          # Spring Boot 4.x / Spring Data MongoDB 5.x (sb4 profile)
+          - spring-boot: '4.0'
+            maven-flags: '-Psb4'
 
     services:
       mongodb:
@@ -49,21 +59,23 @@ jobs:
           org.jacoco:jacoco-maven-plugin:0.8.12:prepare-agent
           verify
           org.jacoco:jacoco-maven-plugin:0.8.12:report
+          ${{ matrix.maven-flags }}
 
       - name: SpotBugs static analysis
+        if: matrix.spring-boot == '3.3'
         run: mvn -B com.github.spotbugs:spotbugs-maven-plugin:4.8.6.6:spotbugs
 
       - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: test-reports
+          name: test-reports-${{ matrix.spring-boot }}
           path: target/surefire-reports/
           retention-days: 14
           if-no-files-found: ignore
 
       - name: Upload JaCoCo report
-        if: always()
+        if: always() && matrix.spring-boot == '3.3'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: jacoco-report
