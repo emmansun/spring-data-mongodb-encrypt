@@ -50,6 +50,17 @@ jobs:
           gpg-private-key: ${{ secrets.GPG_SIGNING_KEY }}
           gpg-passphrase: GPG_SIGNING_KEY_PASSWORD
 
+      # Workaround for apache/maven#13388: Maven 3.10.0 (rolled out to ubuntu-latest runners)
+      # makes central-publishing-maven-plugin stage local-repository bookkeeping files
+      # (maven-metadata-local.xml, _remote.repositories, .locks/) into the bundle,
+      # which Maven Central rejects with "Bundle has content that does NOT have a .pom file".
+      - name: Pin Maven 3.9.16
+        run: |
+          curl -fsSL https://archive.apache.org/dist/maven/maven-3/3.9.16/binaries/apache-maven-3.9.16-bin.tar.gz -o /tmp/maven.tgz
+          sudo tar -xzf /tmp/maven.tgz -C /opt
+          sudo ln -sf /opt/apache-maven-3.9.16/bin/mvn /usr/local/bin/mvn
+          mvn -version
+
       - name: Build & Test
         run: mvn -B clean verify
 
