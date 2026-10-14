@@ -41,6 +41,11 @@ public class AbstractEncryptionEventListener<T> extends AbstractMongoEventListen
             } catch (CryptOperationException e) {
                 if (silentDecryptionFailure) return null;
                 throw e;
+            } catch (BSONException e) {
+                // with a wrong key, the decrypted garbage can occasionally pass the PKCS#5 padding check,
+                // making the BSON deserialization fail instead of the decryption itself; treat it the same
+                if (silentDecryptionFailure) return null;
+                throw new CryptOperationException("BSON deserialization of decrypted data failed", e);
             }
         }
     }
