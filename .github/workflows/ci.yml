@@ -61,6 +61,10 @@ jobs:
           org.jacoco:jacoco-maven-plugin:0.8.12:report
           ${{ matrix.maven-flags }}
 
+      - name: Enforce coverage floor
+        if: matrix.spring-boot == '3.3'
+        run: mvn -B org.jacoco:jacoco-maven-plugin:0.8.12:check
+
       - name: SpotBugs static analysis
         if: matrix.spring-boot == '3.3'
         run: mvn -B com.github.spotbugs:spotbugs-maven-plugin:4.8.6.6:spotbugs

@@ -1,7 +1,7 @@
 [![CI](https://github.com/emmansun/spring-data-mongodb-encrypt/actions/workflows/ci.yml/badge.svg)](https://github.com/emmansun/spring-data-mongodb-encrypt/actions/workflows/ci.yml)
 [![CodeQL](https://github.com/emmansun/spring-data-mongodb-encrypt/actions/workflows/codeql.yml/badge.svg)](https://github.com/emmansun/spring-data-mongodb-encrypt/actions/workflows/codeql.yml)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/emmansun/spring-data-mongodb-encrypt/badge)](https://scorecard.dev/viewer/?uri=github.com/emmansun/spring-data-mongodb-encrypt)
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.agoston/spring-data-mongodb-encrypt.svg)](http://search.maven.org/#search%7Cga%7C1%7Cio.github.agoston)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.emmansun/spring-data-mongodb-encrypt.svg)](https://central.sonatype.com/artifact/io.github.emmansun/spring-data-mongodb-encrypt)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE.txt)
 [![Java](https://img.shields.io/badge/Java-17%2B-orange.svg)](https://adoptium.net/)
 
@@ -37,7 +37,7 @@ Add dependency:
 
 ```xml
         <dependency>
-            <groupId>io.github.agoston</groupId>
+            <groupId>io.github.emmansun</groupId>
             <artifactId>spring-data-mongodb-encrypt</artifactId>
             <version>2.9.2</version>
         </dependency>
