@@ -39,7 +39,7 @@ Add dependency:
         <dependency>
             <groupId>io.github.emmansun</groupId>
             <artifactId>spring-data-mongodb-encrypt</artifactId>
-            <version>2.9.2</version>
+            <version>3.0.0</version>
         </dependency>
 ```
 
